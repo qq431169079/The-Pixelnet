@@ -17,3 +17,6 @@ def threaded_data_requests():
     pass
 def threaded_lts():
     pass
+while True:
+    conn, addr = server.accept()
+    
