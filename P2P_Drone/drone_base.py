@@ -3,6 +3,7 @@ import threading
 import time
 import random
 import sys
+import scanner
 HOST = ''
 binding = True
 bind_attempts = 0
@@ -11,7 +12,7 @@ squadron_checked = 0
 start_address = ""
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 while binding == True:
-    PORT = random.randrange(49152, 65535)
+    PORT = random.randrange(49152, 50000)
     if bind_attempts <= 5:
         sys.exit()
     try:
@@ -25,8 +26,7 @@ def initialize_process():
 def modules(connection, address):
     pass
 def recv(connection):
-    if connection:
-        pass
+
 def send(connection):
     if connection:
         pass
