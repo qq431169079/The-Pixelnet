@@ -1,5 +1,4 @@
 import subprocess
-import sys
 import get_ip
 def netmask():
     ip = str(get_ip.get_ip())
