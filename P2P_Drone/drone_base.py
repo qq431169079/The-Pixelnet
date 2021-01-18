@@ -12,11 +12,12 @@ squadron_checked = 0
 start_address = ""
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 while binding == True:
-    PORT = random.randrange(49950, 50000)
+    PORT = random.randrange(49975, 50000)
     if bind_attempts <= 5:
         sys.exit()
     try:
         client.bind((HOST, PORT))
+        print(f"BOUND TO: {HOST}:{PORT}")
         binding == False
     except:
         bind_attempts += 1

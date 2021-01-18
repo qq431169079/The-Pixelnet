@@ -15,9 +15,10 @@ def local_peer_scan():
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         print(lhost)
+    
     try:
         for ip in targets:
-            for port in range(49950,50000):
+            for port in range(49975,50000):
                 print(f"Scanning {ip}, {port}")  
                 connection_attempts = 0
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
