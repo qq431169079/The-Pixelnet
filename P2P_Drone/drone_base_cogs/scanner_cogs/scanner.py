@@ -1,7 +1,6 @@
 import socket
 import ip_range
 import get_ip
-import time
 def local_peer_scan():
     possible_peers = []
     max_ip = ip_range.ip_range()
@@ -17,7 +16,7 @@ def local_peer_scan():
         targets.append(lhost[:lhost.rfind(".")] + target_number)
         print(lhost)
     try:
-        for port in range(49152,50000):  
+        for port in range(49950,50000):  
             connection_attempts = 0
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             for i in targets: 
