@@ -13,31 +13,19 @@ def local_peer_scan():
         print(f"TARGET {targets}")
         target_number += 1
         target_number = str(target_number)
-        targets.append(lhost[:lhost.rfind(".")] + target_number)
+        targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         print(lhost)
     try:
-        for port in range(49950,50000):  
-            connection_attempts = 0
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            for i in targets: 
-                result = sock.connect_ex((peer_ip, port))
+        for ip in targets:
+            for port in range(49950,50000):
+                print(f"Scanning {ip}, {port}")  
+                connection_attempts = 0
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+                result = sock.connect_ex((ip, port))
+                print(f"RESULT: {result}")
                 if result == 0:
-                    try:
-                        sock.sendall("[REQUEST_PEER_RESPONSE]")
-                    except:
-                        result = sock.connect_ex((peer_ip, port))
-                        if result == 0:
-                            if connection_attempts <= 3:
-                                sock.sendall("[REQUEST_PEER_RESPONSE]")
-                                continue
-                            else:
-                                break
-                        else:
-                            connection_attempts += 1
-                    try:
-                        possible_peers[peer_ip] = port
-                    except:
-                        pass
+                    possible_peers.append(ip)
+                    break
                 sock.close()
     except socket.gaierror:
         pass

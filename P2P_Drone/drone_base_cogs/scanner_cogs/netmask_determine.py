@@ -13,9 +13,11 @@ def netmask():
                 break
         mask = proc.stdout.readline().rstrip().split(b':')[-1].replace(b' ',b'').decode()
         return mask
+    """
     elif platform.system() == "Linux":
         subnet = IPNetwork(get_ip.get_ip())
         refined_subnet = subnet.netmask
         print(refined_subnet)
         return refined_subnet
+    """
 netmask()
