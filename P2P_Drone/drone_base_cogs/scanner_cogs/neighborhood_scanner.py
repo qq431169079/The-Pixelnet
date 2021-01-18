@@ -36,11 +36,6 @@ def port_scan(ip):
                 sys.exit()
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")
-                result = sock.connect((ip,port))
-                result.sendall(bytes("[PIXELNET_REQUEST]"))
-                result.close()
-                sock.close()
-                sys.exit()
                 break
             sock.close()
     except socket.gaierror:

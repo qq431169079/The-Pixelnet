@@ -15,6 +15,8 @@ start_address = ""
 global server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 bind_attempts = 0
+def initialize_process():
+    neighborhood_scanner.peer_scan()
 while binding == True:
     HOST = get_ip.get_ip()
     PORT = random.randrange(49975, 50000)
@@ -31,8 +33,6 @@ while binding == True:
     except:
         bind_attempts += 1
 
-def initialize_process():
-    neighborhood_scanner.neighborhood_scanner()
 def modules(connection, address):
     pass
 def recv(connection):
@@ -44,4 +44,5 @@ def squadron_check(squadron_dict):
     pass
 
 while True:
+    server.listen(2)
     conn, addr = server.accept()
