@@ -1,6 +1,6 @@
 # addressInNetwork and calcDottedNetmask functions courtesy of: https://stackoverflow.com/a/3188535
-import netmask_determine
-import get_ip
+from . import get_ip
+from . import netmask_determine
 from netaddr import IPNetwork
 def ip_range():
     ip = get_ip.get_ip()

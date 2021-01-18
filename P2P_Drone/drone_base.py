@@ -1,31 +1,38 @@
 import socket
-import threading
 import time
 import random
 import sys
+import threading
+from drone_base_cogs.scanner_cogs import *
+from drone_base_cogs.scanner_cogs import get_ip
 from drone_base_cogs.scanner_cogs import neighborhood_scanner
-HOST = ''
+
+
 binding = True
-bind_attempts = 0
 squadron_dict = {}
 squadron_checked = 0
 start_address = ""
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+global server
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+bind_attempts = 0
 while binding == True:
     HOST = get_ip.get_ip()
     PORT = random.randrange(49975, 50000)
     if bind_attempts >= 5:
         sys.exit()
     try:
-        client.bind((HOST, PORT))
+        server.bind((HOST, PORT))
         print(f"BOUND TO: {HOST}:{PORT}")
-        binding == False
-        neighborhood_scanner.neighborhood_scanner()
+        binding = False
+        time.sleep(1)
+        init_thread = threading.Thread(target=initialize_process, args=())
+        init_thread.name = "init_thread"
+        init_thread.start()
     except:
         bind_attempts += 1
-        pass
+
 def initialize_process():
-    pass
+    neighborhood_scanner.neighborhood_scanner()
 def modules(connection, address):
     pass
 def recv(connection):
@@ -35,5 +42,6 @@ def send(connection):
         pass
 def squadron_check(squadron_dict):
     pass
+
 while True:
-    time.sleep(1)
+    conn, addr = server.accept()
