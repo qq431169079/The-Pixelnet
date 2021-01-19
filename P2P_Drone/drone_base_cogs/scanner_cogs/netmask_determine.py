@@ -1,6 +1,9 @@
 import subprocess
 import platform
-import netifaces
+try:
+    import netifaces
+except:
+    pass
 from . import *
 from . import get_ip
 ip_faces_dict = {}
