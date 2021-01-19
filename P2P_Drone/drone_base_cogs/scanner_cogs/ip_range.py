@@ -11,4 +11,3 @@ def ip_range():
     netaddr_ip = IPNetwork(suffixed_ip)
     max_range = netaddr_ip.size
     return int(max_range)
-ip_range()

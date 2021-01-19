@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import time
+import os.path
 from . import ip_range
 from . import get_ip
 possible_peers = []
@@ -23,6 +24,25 @@ def peer_scan():
                 time.sleep(0.01)
                 worker_threads.start()
 
+def peer_recording(ip, port):
+    dir = '../permanence_files/port_report'
+    filename = "port_report.txt"
+    file_path = os.path.join(dir, filename)
+    if not os.path.isdir(dir):
+        os.mkdir(dir)
+        print("Made dir...")
+    try:
+        file = open(file_path, "x")
+        file.close()
+    except:
+        pass
+    finally:
+        file = open(file_path, "a")
+        file.write("/n")
+        file.write(f"{ip}:{port}")
+        file.close()
+        print("Wrote to file")
+
 def port_scan(ip):
     try:
         for port in range(49975,50000):
@@ -30,12 +50,12 @@ def port_scan(ip):
             connection_attempts = 0
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             result = sock.connect_ex((ip, port))
-            if result != 10060:
-                print(f"{result} FROM {ip}:{port}")
             if port >= 50000:
+                print("Completed Scan.")
                 sys.exit()
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")
+                peer_recording(ip, port)
                 break
             sock.close()
     except socket.gaierror:
@@ -47,3 +67,4 @@ def port_scan(ip):
 def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
+

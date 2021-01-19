@@ -15,7 +15,7 @@ start_address = ""
 global server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 bind_attempts = 0
-def initialize_process():
+def initialization_process():
     neighborhood_scanner.peer_scan()
 while binding == True:
     HOST = get_ip.get_ip()
@@ -27,19 +27,15 @@ while binding == True:
         print(f"BOUND TO: {HOST}:{PORT}")
         binding = False
         time.sleep(1)
-        init_thread = threading.Thread(target=initialize_process, args=())
+        init_thread = threading.Thread(target=initialization_process, args=())
         init_thread.name = "init_thread"
         init_thread.start()
     except:
         bind_attempts += 1
-
 def modules(connection, address):
     pass
-def recv(connection):
+def network():
     pass
-def send(connection):
-    if connection:
-        pass
 def squadron_check(squadron_dict):
     pass
 
