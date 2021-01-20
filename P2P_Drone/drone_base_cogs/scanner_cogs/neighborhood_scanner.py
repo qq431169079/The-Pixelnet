@@ -25,19 +25,13 @@ def peer_scan():
                 worker_threads.start()
 
 def peer_recording(ip, port):
-    dir = '../permanence_files/port_report'
-    filename = "port_report.txt"
-    file_path = os.path.join(dir, filename)
-    if not os.path.isdir(dir):
-        os.mkdir(dir)
-        print("Made dir...")
     try:
-        file = open(file_path, "x")
+        file = open("testing.txt", "x")
         file.close()
     except:
         pass
     finally:
-        file = open(file_path, "a")
+        file = open("testing.txt", "a")
         file.write("/n")
         file.write(f"{ip}:{port}")
         file.close()

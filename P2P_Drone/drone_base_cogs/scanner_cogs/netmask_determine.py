@@ -32,5 +32,3 @@ def netmask():
                 netmask = ip_faces_dict.get("netmask")
                 print(netmask)
                 return netmask
-                
-netmask()
