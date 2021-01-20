@@ -14,8 +14,8 @@ global server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 bind_attempts = 0
 def initialization_process():
-    p2p_server_thread = threading.Thread(target=p2p_server, args=())
-    p2p_server_thread.name = "p2p_server"
+    p2p_server_thread = threading.Thread(target=p2p_welcomer, args=())
+    p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
     neighborhood_scanner.peer_scan()
 while binding == True:
@@ -35,9 +35,11 @@ while binding == True:
         bind_attempts += 1
 def modules(connection, address):
     pass
-def p2p_server():
-    server.listen(2)
-    conn, addr = server.accept()
+def p2p_welcomer():
+    while True:
+        server.listen(200)
+        conn, addr = server.accept()
+        print(f"{addr} has connected!")
 def squadron_check(squadron_dict):
     pass
 
