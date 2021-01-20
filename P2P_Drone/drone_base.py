@@ -37,9 +37,11 @@ def modules(connection, address):
     pass
 def p2p_welcomer():
     while True:
-        server.listen(200)
+        server.listen(2)
         conn, addr = server.accept()
-        print(f"{addr} has connected!")
+        if conn:
+            if addr:
+                
 def squadron_check(squadron_dict):
     pass
 

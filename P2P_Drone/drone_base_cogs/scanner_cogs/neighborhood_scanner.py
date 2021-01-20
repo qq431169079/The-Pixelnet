@@ -34,13 +34,31 @@ def peer_recording(ip, port):
     if not os.path.isdir(directory):
         os.mkdir(directory)
     ip_to_write = ip + ":" + port
-    file = open(file_path, "a")
-    if ip_to_write in file:
+    try:
+        file = open(file_path, "r")
+    except:
+        try:
+            file = open(file_path, "x")
+        except:
+            print("UNEXPECTED PEER RECORDING FILE ERROR")
+            sys.exit()
+    finally:
+        try:
+            file = open(file_path, "a+")
+        except:
+            print("UNEXPECTED PEER RECORDING FILE ERROR")
+            sys.exit()
+    if ip_to_write in file.read():
         file.close()
+        print("FILE ALREADY WRITTEN!")
+        sys.exit()
     else:
+        file.close()
+        file = open(file_path, "a")
         file.write(ip_to_write)
         file.write("\n")
         file.close()
+        sys.exit()
 
 def port_scan(ip):
     try:
