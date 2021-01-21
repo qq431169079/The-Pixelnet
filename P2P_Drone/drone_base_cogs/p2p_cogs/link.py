@@ -33,6 +33,7 @@ def check_linked_drone(addr):
     filename = "port_report.txt"
     file_path = os.path.join(directory, filename)
     if not os.path.isdir(directory):
+        print("PORT_SCAN_REQUIRED")
         return "port_scan_required"
     else:
         try:
@@ -52,6 +53,7 @@ def check_linked_drone(addr):
                 return "port_scan_required"
 
 def link(conn, addr):
+    print("NET_LINK_KINDA_ESTABLISHED")
     conn.settimeout(5)
     try:
         conn.sendall(bytes("NET_LINK_ESTABLISHED", "utf-8"))

@@ -19,7 +19,9 @@ def initialization_process():
     p2p_server_thread = threading.Thread(target=p2p_welcomer, args=())
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
-    neighborhood_scanner.peer_scan()
+    neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
+    neighborhood_scanner_init_thread.name = "init_scanner_thread"
+    neighborhood_scanner_init_thread.start()
 while binding == True:
     HOST = get_ip.get_ip()
     PORT = random.randrange(49975, 50000)
@@ -41,7 +43,7 @@ def p2p_welcomer():
     while True:
         server.listen(2)
         conn, addr = server.accept()
-        print(f"BOT_CONNETED:{conn}, {addr}")
+        print(f"BOT_CONNECTED:{conn}, {addr}")
         if conn:
             if addr:
                 link_drone_thread = threading.Thread(target=link.link_drone, args=(conn, addr,))

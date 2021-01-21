@@ -3,6 +3,7 @@ import threading
 import sys
 import time
 import os.path
+import random
 from . import ip_range
 from . import get_ip
 possible_peers = []
@@ -10,36 +11,41 @@ max_ip = ip_range.ip_range()
 global lhost
 lhost = get_ip.get_ip()
 targets = []
+actual_workers = []
 finished_workers = []
 def peer_scan():
-    if os.path.exists("peer_scan.lock"):
-        while os.path.exists("peer_scan.lock"):
-            if os.path.exists("peer_scan.lock"):
-                time.sleep(1)
-            else:
-                break
-    else:
-        peer_lock = open("peer_scan.lock", "x")
-        target_number = 0
-        for i in range(0, max_ip):
-            target_number = int(target_number)
-            target_number += 1
-            target_number = str(target_number)
-            targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
-            if i >= max_ip - 1:
-                targets.remove(lhost)
-                for workers in targets:
-                    worker_threads = threading.Thread(target=worker_scan, args=(workers))
-                    worker_threads.name = f"Port Scan Worker {workers}"
-                    time.sleep(0.01)
-                    worker_threads.start()
-                    if workers == targets[-1]:
-                        scanner_lock = True
-                        while scanner_lock == True:
-                            if targets == finished_workers:
+    while os.path.exists("peer_scan.lock"):
+        print("scanner_locked")
+        time.sleep(1)
+    time.sleep(random.randint(1,10))
+    peer_lock = open("peer_scan.lock", "x")
+    target_number = 0
+    for i in range(0, max_ip):
+        target_number = int(target_number)
+        target_number += 1
+        target_number = str(target_number)
+        targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
+        print(targets)
+        if i >= max_ip - 1:
+            targets.remove(lhost)
+            for workers in targets:
+                worker_threads = threading.Thread(target=worker_scan, args=(workers))
+                worker_threads.name = f"Port Scan Worker {workers}"
+                time.sleep(0.01)
+                worker_threads.start()
+                if workers == targets[-1]:
+                    scanner_lock = True
+                    while scanner_lock == True:
+                        if targets == finished_workers:
+                            try:
                                 os.remove("peer_scan.lock")
-                            else:
-                                time.sleep(1)
+                            except:
+                                pass
+                            finally:
+                                scanner_lock = False
+                                sys.exit()
+                        else:
+                            time.sleep(1)
 
 def peer_recording(ip, port):
     ip = str(ip)
@@ -85,6 +91,7 @@ def port_scan(ip):
             if port >= 50000:
                 print("Completed Scan.")
                 finished_workers.append(ip)
+                print(finished_workers)
                 try:
                     sock.close()
                 except:
@@ -98,10 +105,10 @@ def port_scan(ip):
                 break
             sock.close()
     except socket.gaierror:
-        pass
+        sys.exit()
 
     except socket.error:
-        pass
+        print(f"SOCKET ERROR:{socket.error}")
 
 def worker_scan(*ip):
     str = ''.join(ip)
