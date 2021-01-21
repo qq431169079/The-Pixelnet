@@ -6,6 +6,8 @@ import threading
 from drone_base_cogs.scanner_cogs import *
 from drone_base_cogs.scanner_cogs import get_ip
 from drone_base_cogs.scanner_cogs import neighborhood_scanner
+from drone_base_cogs.p2p_cogs import *
+from drone_base_cogs.p2p_cogs import link
 binding = True
 squadron_dict = {}
 squadron_checked = 0
@@ -41,7 +43,9 @@ def p2p_welcomer():
         conn, addr = server.accept()
         if conn:
             if addr:
-                
+                link_drone_thread = threading.Thread(target=link.link_drone, args=(conn, addr,))
+                link_drone_thread.name = "drone_link"
+                link_drone_thread.start()
 def squadron_check(squadron_dict):
     pass
 

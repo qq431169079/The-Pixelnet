@@ -27,7 +27,6 @@ def peer_scan():
 def peer_recording(ip, port):
     ip = str(ip)
     port = str(port)
-    import os.path
     directory = './permanence_files'
     filename = "port_report.txt"
     file_path = os.path.join(directory, filename)
