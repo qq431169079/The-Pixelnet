@@ -19,6 +19,7 @@ def peer_scan():
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
+            targets.remove(lhost)
             for workers in targets:
                 worker_threads = threading.Thread(target=worker_scan, args=(workers))
                 time.sleep(0.01)

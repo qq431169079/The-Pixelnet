@@ -2,25 +2,32 @@ import threading
 import socket
 import os.path
 import sys
-from scanner_cogs.neighborhood_scanner import *
-from scanner_cogs.neighborhood_scanner import neighborhood_scanner
-from scanner_cogs.ip_range import ip_range
-
+from ..scanner_cogs import *
+from ..scanner_cogs import neighborhood_scanner
+from ..scanner_cogs import ip_range
+from .. scanner_cogs import get_ip
 local_net = []
 lhost = get_ip.get_ip()
 
 def check_linked_drone(addr):
-    target_number = ip_range.ip_range()
+    max_ip = ip_range.ip_range()
+    target_number = 0
     for i in range(0, max_ip):
         target_number = int(target_number)
         target_number += 1
         target_number = str(target_number)
+        print(f"TARGET NUMBER {target_number}")
         local_net.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
             if addr in local_net:
-                pass
-            elif addr not in local_net:
+                print("Addr in")
+                break
+            elif addr[0] not in local_net:
+                print("addr not")
+                print(local_net)
+                print(addr[0])
                 return "not_local"
+    print("Past_drone_check_for")
     count = 0
     directory = './permanence_files'
     filename = "port_report.txt"
@@ -57,10 +64,13 @@ def link(conn, addr):
         conn.close()
         sys.exit()
     if net_link_confirm == "NET_LINK_ESTABLISHED":
+        print("NET_LINK_ESTABLISHED")
         conn.settimeout(20)
         while True:
             conn.sendall(bytes("WHEEEE", "utf-8"))
             link_check = conn.recv(2048)
+            print(link_check)
+
 def link_drone(conn, addr):
     confirm_drone = check_linked_drone(addr)
     if confirm_drone == "port_scan_required":

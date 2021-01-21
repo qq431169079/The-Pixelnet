@@ -41,6 +41,7 @@ def p2p_welcomer():
     while True:
         server.listen(2)
         conn, addr = server.accept()
+        print(f"BOT_CONNETED:{conn}, {addr}")
         if conn:
             if addr:
                 link_drone_thread = threading.Thread(target=link.link_drone, args=(conn, addr,))
