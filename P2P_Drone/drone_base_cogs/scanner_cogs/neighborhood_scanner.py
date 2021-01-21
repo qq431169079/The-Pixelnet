@@ -22,6 +22,7 @@ def peer_scan():
             targets.remove(lhost)
             for workers in targets:
                 worker_threads = threading.Thread(target=worker_scan, args=(workers))
+                worker_threads.name = f"Port Scan Worker {workers}"
                 time.sleep(0.01)
                 worker_threads.start()
 
