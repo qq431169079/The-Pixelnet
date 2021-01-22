@@ -13,19 +13,24 @@ lhost = get_ip.get_ip()
 targets = []
 actual_workers = []
 finished_workers = []
+lock_dir = "./The-Pixelnet/permanence_files"
+lock_file_name = "peer_scan.lock"
+lock_file_path = os.path.join(lock_dir, lock_file_name)
+if not os.path.isdir(lock_dir):
+    os.mkdir(lock_dir)
+
 def peer_scan():
-    while os.path.exists("peer_scan.lock"):
+    while os.path.exists(lock_file_path):
         print("scanner_locked")
         time.sleep(1)
     time.sleep(random.randint(1,10))
-    peer_lock = open("peer_scan.lock", "x")
+    peer_lock = open(lock_file_path, "x")
     target_number = 0
     for i in range(0, max_ip):
         target_number = int(target_number)
         target_number += 1
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
-        print(targets)
         if i >= max_ip - 1:
             targets.remove(lhost)
             for workers in targets:
@@ -33,28 +38,22 @@ def peer_scan():
                 worker_threads.name = f"Port Scan Worker {workers}"
                 time.sleep(0.01)
                 worker_threads.start()
-                if workers == targets[-1]:
-                    scanner_lock = True
-                    while scanner_lock == True:
-                        if targets == finished_workers:
-                            try:
-                                os.remove("peer_scan.lock")
-                            except:
-                                pass
-                            finally:
-                                scanner_lock = False
-                                sys.exit()
-                        else:
-                            time.sleep(1)
+                if not targets:
+                    print("Targets is equal to finished_workers")
+                    try:
+                        os.remove(lock_file_path)
+                    except:
+                        pass
+                    finally:
+                        sys.exit()
 
 def peer_recording(ip, port):
     ip = str(ip)
     port = str(port)
-    directory = './permanence_files'
     filename = "port_report.txt"
-    file_path = os.path.join(directory, filename)
-    if not os.path.isdir(directory):
-        os.mkdir(directory)
+    file_path = os.path.join(lock_dir, filename)
+    if not os.path.isdir(lock_dir):
+        os.mkdir(lock_dir)
     ip_to_write = ip + ":" + port
     try:
         file = open(file_path, "r")
@@ -84,14 +83,14 @@ def peer_recording(ip, port):
 
 def port_scan(ip):
     try:
-        for port in range(49975,50000):
+        for port in range(49975,50001):
             ip = str(ip)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            sock.settimeout(20)
             result = sock.connect_ex((ip, port))
-            if port >= 50000:
+            if port >= 50001:
                 print("Completed Scan.")
-                finished_workers.append(ip)
-                print(finished_workers)
+                targets.remove(ip)
                 try:
                     sock.close()
                 except:
@@ -103,9 +102,11 @@ def port_scan(ip):
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
                 break
+            else:
+                print(f"Nothing on {ip}:{port}")
             sock.close()
     except socket.gaierror:
-        sys.exit()
+        pass
 
     except socket.error:
         print(f"SOCKET ERROR:{socket.error}")

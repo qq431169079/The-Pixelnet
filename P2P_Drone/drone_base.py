@@ -3,6 +3,7 @@ import time
 import random
 import sys
 import threading
+import os.path
 from drone_base_cogs.scanner_cogs import *
 from drone_base_cogs.scanner_cogs import get_ip
 from drone_base_cogs.scanner_cogs import neighborhood_scanner
@@ -19,6 +20,10 @@ def initialization_process():
     p2p_server_thread = threading.Thread(target=p2p_welcomer, args=())
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
+    try:
+        os.remove("./The-Pixelnet/permanence_files/peer_scan.lock")
+    except:
+        pass
     neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
     neighborhood_scanner_init_thread.name = "init_scanner_thread"
     neighborhood_scanner_init_thread.start()
