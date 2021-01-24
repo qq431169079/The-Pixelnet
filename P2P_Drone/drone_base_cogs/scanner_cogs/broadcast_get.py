@@ -1,3 +1,4 @@
+#Only good on Linux for now.
 import netifaces
 ip_faces_dict = {}
 def list_to_dict(a):
