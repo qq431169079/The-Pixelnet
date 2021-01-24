@@ -12,7 +12,6 @@ global lhost
 lhost = get_ip.get_ip()
 targets = []
 actual_workers = []
-finished_workers = []
 lock_dir = "./The-Pixelnet/permanence_files"
 lock_file_name = "peer_scan.lock"
 lock_file_path = os.path.join(lock_dir, lock_file_name)
@@ -38,14 +37,18 @@ def peer_scan():
                 worker_threads.name = f"Port Scan Worker {workers}"
                 time.sleep(0.01)
                 worker_threads.start()
-                if not targets:
-                    print("Targets is equal to finished_workers")
-                    try:
-                        os.remove(lock_file_path)
-                    except:
-                        pass
-                    finally:
-                        sys.exit()
+                if workers == targets[-1]:
+                    print("WORKERS END")
+                    time.sleep(5)
+                    while True:
+                        if not actual_workers:
+                            print("Targets is equal to finished_workers")
+                            try:
+                                os.remove(lock_file_path)
+                            except:
+                                pass
+                            finally:
+                                sys.exit()
 
 def peer_recording(ip, port):
     ip = str(ip)
@@ -82,31 +85,44 @@ def peer_recording(ip, port):
         sys.exit()
 
 def port_scan(ip):
+    actual_workers.append(ip)
     try:
         for port in range(49975,50001):
             ip = str(ip)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             sock.settimeout(20)
             result = sock.connect_ex((ip, port))
-            if port >= 50001:
-                print("Completed Scan.")
-                targets.remove(ip)
-                try:
-                    sock.close()
-                except:
-                    pass
-                sys.exit()
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")
                 peer_record_thread = threading.Thread(target=peer_recording, args=(ip, port))
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
-                break
+                if port == 50000:
+                    actual_workers.remove(ip)
+                    print("Completed Scan.")
+                    print(actual_workers)
+                    try:
+                        sock.close()
+                    except:
+                        pass
+                    sys.exit()
+                else:
+                    break
+            if port == 50000:
+                actual_workers.remove(ip)
+                print("Completed Scan.")
+                print(actual_workers)
+                try:
+                    sock.close()
+                except:
+                    pass
+                sys.exit()
             else:
                 print(f"Nothing on {ip}:{port}")
             sock.close()
     except socket.gaierror:
-        pass
+        actual_workers.remove(ip)
+        sys.exit()
 
     except socket.error:
         print(f"SOCKET ERROR:{socket.error}")
