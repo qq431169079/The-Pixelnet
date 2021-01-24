@@ -13,7 +13,7 @@ global lhost
 lhost = get_ip.get_ip()
 targets = []
 actual_workers = []
-lock_dir = "./The-Pixelnet/permanence_files"
+lock_dir = "./permanence_files"
 lock_file_name = "peer_scan.lock"
 lock_file_path = os.path.join(lock_dir, lock_file_name)
 if not os.path.isdir(lock_dir):
