@@ -28,6 +28,7 @@ def peer_scan():
         time.sleep(1)
     time.sleep(random.randint(1,10))
     peer_lock = open(lock_file_path, "x")
+    peer_lock.close()
     target_number = 0
     try:
         broadcast = broadcast_get.get()
@@ -55,12 +56,8 @@ def peer_scan():
                     while True:
                         if not actual_workers:
                             print("Targets is equal to finished_workers")
-                            try:
-                                os.remove(lock_file_path)
-                            except:
-                                pass
-                            finally:
-                                sys.exit()
+                            os.remove("./permanence_files/peer_scan.lock")
+                            sys.exit()
 
 def peer_recording(ip, port):
     ip = str(ip)
@@ -102,7 +99,7 @@ def port_scan(ip):
         for port in range(49975,50001):
             ip = str(ip)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-            sock.settimeout(20)
+            sock.settimeout(5)
             result = sock.connect_ex((ip, port))
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")

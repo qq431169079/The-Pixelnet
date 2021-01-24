@@ -21,7 +21,8 @@ def initialization_process():
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
     try:
-        os.remove("./The-Pixelnet/permanence_files/peer_scan.lock")
+        # Should be noted that after finishing development on VSCode, this needs to be taken out to mean in the context of the stand-alone drone
+        os.remove("./permanence_files/peer_scan.lock")
     except:
         pass
     neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
