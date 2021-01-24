@@ -26,16 +26,15 @@ def peer_scan():
     time.sleep(random.randint(1,10))
     peer_lock = open(lock_file_path, "x")
     target_number = 0
-    broadcast_get.get()
+    broadcast = broadcast_get.get()
     for i in range(0, max_ip):
         target_number = int(target_number)
         target_number += 1
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
-        broadcast = broadcast_get.get()
-        targets.remove(broadcast)
         if i >= max_ip - 1:
             targets.remove(lhost)
+            targets.remove(broadcast)
             for workers in targets:
                 worker_threads = threading.Thread(target=worker_scan, args=(workers))
                 worker_threads.name = f"Port Scan Worker {workers}"
