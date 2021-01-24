@@ -19,6 +19,10 @@ def netmask():
             if ip.encode() in line:
                 break
         mask = proc.stdout.readline().rstrip().split(b':')[-1].replace(b' ',b'').decode()
+        for iface in netifaces.interfaces():
+            if iface == 'lo' or iface.startswith('vbox'):
+                continue
+            iface_details = netifaces.ifaddresses(iface)
         return mask
     elif platform.system() == "Linux":
         for iface in netifaces.interfaces():

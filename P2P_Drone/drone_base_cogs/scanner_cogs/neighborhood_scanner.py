@@ -6,6 +6,7 @@ import os.path
 import random
 from . import ip_range
 from . import get_ip
+from . import broadcast_get
 possible_peers = []
 max_ip = ip_range.ip_range()
 global lhost
@@ -25,11 +26,14 @@ def peer_scan():
     time.sleep(random.randint(1,10))
     peer_lock = open(lock_file_path, "x")
     target_number = 0
+    broadcast_get.get()
     for i in range(0, max_ip):
         target_number = int(target_number)
         target_number += 1
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
+        broadcast = broadcast_get.get()
+        targets.remove(broadcast)
         if i >= max_ip - 1:
             targets.remove(lhost)
             for workers in targets:
