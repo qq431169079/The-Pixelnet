@@ -16,7 +16,7 @@ def check_linked_drone(addr):
         target_number = int(target_number)
         target_number += 1
         target_number = str(target_number)
-        print(f"TARGET NUMBER {target_number}")
+        #print(f"TARGET NUMBER {target_number}")
         local_net.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
             if addr in local_net:
@@ -70,23 +70,26 @@ def link(conn, addr):
         conn.settimeout(20)
         while True:
             conn.sendall(bytes("WHEEEE", "utf-8"))
-            link_check = conn.recv(2048)
-            print(link_check)
-
+            raw_link_check = conn.recv(2048)
+            link_check = raw_link_check.decode('utf-8')
 def link_drone(conn, addr):
     confirm_drone = check_linked_drone(addr)
     if confirm_drone == "port_scan_required":
+        print("PORT_SCAN_REQUIRED")
         neighborhood_scanner.peer_scan()
         conn.close()
         sys.exit()
     elif confirm_drone == "suspected_bot":
+        print("SUSPECTED_BOT")
         link_thread = threading.Thread(target=link, args=(conn,addr,))
         link_thread.name = "DRONE_LINK_THREAD"
         link_thread.start()
     elif confirm_drone == "not_suspected":
+        print("NOT_SUSPECTED")
         conn.close()
         sys.exit()
     elif check_linked_drone == "not_local":
+        print("NOT_LOCAL")
         link_thread = threading.Thread(target=link, args=(conn,addr,))
         link_thread.name = "DRONE_LINK_THREAD"
         link_thread.start()

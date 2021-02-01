@@ -24,10 +24,13 @@ if not os.path.isdir(lock_dir):
 
 def peer_scan():
     while os.path.exists(lock_file_path):
-        print("scanner_locked")
+        #print("scanner_locked")
         time.sleep(1)
     time.sleep(random.randint(1,10))
-    peer_lock = open(lock_file_path, "x")
+    try:
+        peer_lock = open(lock_file_path, "x")
+    except:
+        pass
     peer_lock.close()
     target_number = 0
     try:
@@ -40,7 +43,8 @@ def peer_scan():
         target_number = str(target_number)
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
-            targets.remove(lhost)
+            # Putting the line below on hold for now, for connection testing purposes.
+            #targets.remove(lhost)
             try:
                 targets.remove(broadcast)
             except:
@@ -51,11 +55,11 @@ def peer_scan():
                 time.sleep(0.01)
                 worker_threads.start()
                 if workers == targets[-1]:
-                    print("WORKERS END")
+                    #print("WORKERS END")
                     time.sleep(5)
                     while True:
                         if not actual_workers:
-                            print("Targets is equal to finished_workers")
+                            #print("Targets is equal to finished_workers")
                             os.remove("./permanence_files/peer_scan.lock")
                             sys.exit()
 
@@ -79,19 +83,19 @@ def peer_recording(ip, port):
         try:
             file = open(file_path, "a+")
         except:
-            print("UNEXPECTED PEER RECORDING FILE ERROR")
+            #print("UNEXPECTED PEER RECORDING FILE ERROR")
             sys.exit()
-    if ip_to_write in file.read():
-        file.close()
-        print("FILE ALREADY WRITTEN!")
-        sys.exit()
-    else:
-        file.close()
-        file = open(file_path, "a")
-        file.write(ip_to_write)
-        file.write("\n")
-        file.close()
-        sys.exit()
+    check_ip = file.readlines()
+    for line in check_ip:
+        if line == ip_to_write:
+            sys.exit()
+        else:
+            file.close()
+            file = open(file_path, "a")
+            file.write(ip_to_write)
+            file.write("\n")
+    file.close()
+    sys.exit()
 
 def port_scan(ip):
     actual_workers.append(ip)
@@ -108,8 +112,8 @@ def port_scan(ip):
                 peer_record_thread.start()
                 if port == 50000:
                     actual_workers.remove(ip)
-                    print("Completed Scan.")
-                    print(actual_workers)
+                    #print("Completed Scan.")
+                    #print(actual_workers)
                     try:
                         sock.close()
                     except:
@@ -119,15 +123,21 @@ def port_scan(ip):
                     break
             if port == 50000:
                 actual_workers.remove(ip)
-                print("Completed Scan.")
-                print(actual_workers)
+                #print("Completed Scan.")
+                if lhost in actual_workers:
+                    try:
+                        actual_workers.remove(lhost)
+                    except:
+                        pass
+                #print(actual_workers)
                 try:
                     sock.close()
                 except:
                     pass
                 sys.exit()
             else:
-                print(f"Nothing on {ip}:{port}")
+                pass
+                #print(f"Nothing on {ip}:{port}")
             sock.close()
     except socket.gaierror:
         actual_workers.remove(ip)
