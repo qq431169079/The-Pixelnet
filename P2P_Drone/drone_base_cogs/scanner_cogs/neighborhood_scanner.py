@@ -88,12 +88,12 @@ def peer_recording(ip, port):
     check_ip = file.readlines()
     for line in check_ip:
         if line == ip_to_write:
+            print(line)
             sys.exit()
-        else:
-            file.close()
-            file = open(file_path, "a")
-            file.write(ip_to_write)
-            file.write("\n")
+    file.close()
+    file = open(file_path, "a")
+    file.write(ip_to_write)
+    file.write("\n")
     file.close()
     sys.exit()
 
