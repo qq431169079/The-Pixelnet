@@ -29,9 +29,9 @@ def peer_scan():
     time.sleep(random.randint(1,10))
     try:
         peer_lock = open(lock_file_path, "x")
+        peer_lock.close()
     except:
         pass
-    peer_lock.close()
     target_number = 0
     try:
         broadcast = broadcast_get.get()
