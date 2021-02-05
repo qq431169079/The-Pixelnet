@@ -21,7 +21,6 @@ lock_file_name = "peer_scan.lock"
 lock_file_path = os.path.join(lock_dir, lock_file_name)
 if not os.path.isdir(lock_dir):
     os.mkdir(lock_dir)
-
 def peer_scan():
     while os.path.exists(lock_file_path):
         #print("scanner_locked")
@@ -44,7 +43,7 @@ def peer_scan():
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
             # Putting the line below on hold for now, for connection testing purposes.
-            #targets.remove(lhost)
+            targets.remove(lhost)
             try:
                 targets.remove(broadcast)
             except:
@@ -85,11 +84,14 @@ def peer_recording(ip, port):
         except:
             #print("UNEXPECTED PEER RECORDING FILE ERROR")
             sys.exit()
-    check_ip = file.readlines()
-    for line in check_ip:
-        if line == ip_to_write:
-            print(line)
+    with open(file_path, "r") as file:
+        ip_list_str = file.read()
+        print(ip_list_str)
+        if ip_to_write in ip_list_str:
+            file.close()
             sys.exit()
+        else:
+            pass
     file.close()
     file = open(file_path, "a")
     file.write(ip_to_write)
