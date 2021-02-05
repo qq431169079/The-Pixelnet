@@ -151,6 +151,7 @@ def port_scan(ip):
         sys.exit()
 
     except socket.error:
+        actual_workers.remove(ip)
         print(f"SOCKET ERROR:{socket.error}")
 
 def worker_scan(*ip):
