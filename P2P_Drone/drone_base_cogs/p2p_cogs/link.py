@@ -39,10 +39,6 @@ def link(conn, addr):
             link_check = raw_link_check.decode('utf-8')
 def link_drone(conn, addr):
     link_thread = threading.Thread(target=link, args=(conn,addr))
-<<<<<<< HEAD
-    link_thread.start()
-    sys.exit()
-=======
     link(conn, addr)
+    link.start()
     print(f"Link with {conn}, {addr} established.")
->>>>>>> 6600b60638d949af0c51b19c4ba41971298dd7eb
