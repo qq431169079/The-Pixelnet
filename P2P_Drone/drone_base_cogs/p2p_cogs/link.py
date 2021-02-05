@@ -16,6 +16,7 @@ def link(conn, addr):
     try:
         conn.sendall(bytes("NET_LINK_ESTABLISHED", "utf-8"))
     except:
+        print("LIKELY_PORT_SCAN")
         conn.close()
         sys.exit()
     try:
@@ -32,4 +33,5 @@ def link(conn, addr):
             link_check = raw_link_check.decode('utf-8')
 def link_drone(conn, addr):
     link_thread = threading.Thread(target=link, args=(conn,addr))
-    link(conn, addr)
+    link_thread.start()
+    sys.exit()
