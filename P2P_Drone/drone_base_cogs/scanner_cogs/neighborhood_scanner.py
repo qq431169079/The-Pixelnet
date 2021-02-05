@@ -115,6 +115,11 @@ def port_scan(ip):
                 if port == 50000:
                     actual_workers.remove(ip)
                     #print("Completed Scan.")
+                    if lhost in actual_workers:
+                        try:
+                            actual_workers.remove(lhost)
+                        except:
+                            pass
                     #print(actual_workers)
                     try:
                         sock.close()
