@@ -13,6 +13,12 @@ lhost = get_ip.get_ip()
 def link(conn, addr):
     print("NET_LINK_KINDA_ESTABLISHED")
     conn.settimeout(5)
+    conn.sendall(bytes("attempting_send", "utf-8"))
+    try:
+        net_link = conn.recv(2048)
+    except:
+        conn.close()
+        sys.exit()
     try:
         conn.sendall(bytes("NET_LINK_ESTABLISHED", "utf-8"))
     except:
@@ -33,3 +39,4 @@ def link(conn, addr):
 def link_drone(conn, addr):
     link_thread = threading.Thread(target=link, args=(conn,addr))
     link(conn, addr)
+    print(f"Link with {conn}, {addr} established.")
