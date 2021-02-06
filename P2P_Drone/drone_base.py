@@ -17,7 +17,7 @@ global server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 bind_attempts = 0
 def initialization_process():
-    p2p_server_thread = threading.Thread(target=p2p_welcomer, args=())
+    p2p_server_thread = threading.Thread(target=link.p2p_welcomer, args=(server,))
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
     try:
@@ -45,16 +45,7 @@ while binding == True:
         bind_attempts += 1
 def modules(connection, address):
     pass
-def p2p_welcomer():
-    while True:
-        server.listen(2)
-        conn, addr = server.accept()
-        print(f"BOT_CONNECTED:{conn}, {addr}")
-        if conn:
-            if addr:
-                link_drone_thread = threading.Thread(target=link.link_drone, args=(conn, addr,))
-                link_drone_thread.name = "drone_link"
-                link_drone_thread.start()
+
 def squadron_check(squadron_dict):
     pass
 

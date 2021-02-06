@@ -8,22 +8,35 @@ from ..scanner_cogs import ip_range
 from .. scanner_cogs import get_ip
 local_net = []
 lhost = get_ip.get_ip()
-    
 
-def link(conn, addr):
+def p2p_welcomer(server):
+    while True:
+        server.listen(2)
+        print("SERVER LISTENING")
+        conn, addr = server.accept()
+        print(f"BOT_CONNECTED:{conn}, {addr}")
+        if conn:
+            if addr:
+                link_drone_thread = threading.Thread(target=link, args=(conn, addr, server))
+                link_drone_thread.name = "drone_link"
+                link_drone_thread.start()
+
+def link(conn, addr, server):
     print("NET_LINK_KINDA_ESTABLISHED")
     conn.settimeout(5)
-    conn.listen(1)
-    conn.connect(addr)
+    print(f"CONNECTED TO {conn}")
     #attemptng Link establishment
-    conn.sendall(bytes("attempting_send", "utf-8"))
+    conn.send(bytes("attempting_send", "utf-8"))
     try:
-        net_link = conn.recv(2048)
+        raw_net_link = conn.recv(2048)
+        net_link = raw_net_link.decode('utf-8')
+        if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
+            print("P2P REQUEST ACK")
     except:
         conn.close()
         sys.exit()
     try:
-        conn.sendall(bytes("NET_LINK_ESTABLISHED", "utf-8"))
+        conn.send(bytes("NET_LINK_ESTABLISHED", "utf-8"))
     except:
         print("LIKELY_PORT_SCAN")
         conn.close()

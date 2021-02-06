@@ -112,6 +112,9 @@ def port_scan(ip):
                 peer_record_thread = threading.Thread(target=peer_recording, args=(ip, port))
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
+                outreach_thread = threading.Thread(target=p2p_outreach_link, args=(ip, sock,))
+                outreach_thread.name = "Link Outreach Thread"
+                outreach_thread.start()
                 if port == 50000:
                     actual_workers.remove(ip)
                     #print("Completed Scan.")
@@ -157,3 +160,15 @@ def port_scan(ip):
 def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
+
+def p2p_outreach_link(ip, sock):
+    print(f"OUTREACHING TO {ip}")
+    sock.settimeout(10)
+    try:
+        sock.connect(ip)
+    except:
+        sock.close()
+        return "outreach_failed"
+    sock.sendall(bytes("PIXELNET_CONNECT_P2P_REQUEST", "utf-8"))
+    sock.close()
+    return "outreach_complete"
