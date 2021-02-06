@@ -13,6 +13,9 @@ lhost = get_ip.get_ip()
 def link(conn, addr):
     print("NET_LINK_KINDA_ESTABLISHED")
     conn.settimeout(5)
+    conn.listen(1)
+    conn.connect(addr)
+    #attemptng Link establishment
     conn.sendall(bytes("attempting_send", "utf-8"))
     try:
         net_link = conn.recv(2048)
@@ -37,6 +40,7 @@ def link(conn, addr):
             conn.sendall(bytes("WHEEEE", "utf-8"))
             raw_link_check = conn.recv(2048)
             link_check = raw_link_check.decode('utf-8')
+            
 def link_drone(conn, addr):
     link_thread = threading.Thread(target=link, args=(conn,addr))
     link_thread.start()
