@@ -27,15 +27,13 @@ def link(conn, addr, server):
     print(f"CONNECTED TO {conn}")
     #attemptng Link establishment
     conn.send(bytes("attempting_send", "utf-8"))
-    try:
-        raw_net_link = conn.recv(2048)
-        net_link = raw_net_link.decode('utf-8')
-        if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
-            print("P2P REQUEST ACK")
-    except:
-        print("LINK BROKEN")
-        conn.close()
-        sys.exit()
+    raw_net_link = conn.recv(2048)
+    net_link = raw_net_link.decode('utf-8')
+    if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
+        print("P2P REQUEST ACK")
+        #print("LINK BROKEN")
+        #conn.close()
+        #sys.exit()
     try:
         conn.send(bytes("NET_LINK_ESTABLISHED", "utf-8"))
     except:
