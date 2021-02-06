@@ -23,7 +23,6 @@ def p2p_welcomer(server):
 
 def link(conn, addr, server):
     print("NET_LINK_KINDA_ESTABLISHED")
-    conn.settimeout(5)
     print(f"CONNECTED TO {conn}")
     #attemptng Link establishment
     conn.send(bytes("attempting_send", "utf-8"))
@@ -34,12 +33,10 @@ def link(conn, addr, server):
         #print("LINK BROKEN")
         #conn.close()
         #sys.exit()
-    try:
         conn.send(bytes("NET_LINK_ESTABLISHED", "utf-8"))
-    except:
-        print("LIKELY_PORT_SCAN")
-        conn.close()
-        sys.exit()
+        #print("LIKELY_PORT_SCAN")
+        #conn.close()
+        #sys.exit()
     try:
         net_link_confirm = conn.recv(2048)
     except:
