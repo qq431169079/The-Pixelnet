@@ -22,24 +22,27 @@ def p2p_welcomer(server):
                 link_drone_thread.start()
 
 def link(conn, addr, server):
+    waiting_for_information = True
     conn.settimeout(10)
     print("NET_LINK_KINDA_ESTABLISHED")
     print(f"CONNECTED TO {conn} IN LINK")
     #attempting Link establishment
     conn.send(bytes("attempting_send", "utf-8"))
     print("ATTEMPTED SEND")
-    raw_net_link = conn.recv(2048)
-    print("RECEIVED INFORMATION FROM RAW_NET_LINK")
-    net_link = raw_net_link.decode('utf-8')
-    if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
-        print("P2P REQUEST ACK")
-        #print("LINK BROKEN")
-        #conn.close()
-        #sys.exit()
-        conn.send(bytes("NET_LINK_ESTABLISHED", "utf-8"))
-        #print("LIKELY_PORT_SCAN")
-        #conn.close()
-        #sys.exit()
+    while waiting_for_information == True:
+        raw_net_link = conn.recv(2048)
+        if raw_net_link:
+            print("RECEIVED INFORMATION FROM RAW_NET_LINK")
+            net_link = raw_net_link.decode('utf-8')
+            if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
+                print("P2P REQUEST ACK")
+                #print("LINK BROKEN")
+                #conn.close()
+                #sys.exit()
+                conn.send(bytes("NET_LINK_ESTABLISHED", "utf-8"))
+                #print("LIKELY_PORT_SCAN")
+                #conn.close()
+                #sys.exit()
     try:
         net_link_confirm_raw = conn.recv(2048)
         net_link_confirm = net_link_confirm_raw.decode('utf-8')
