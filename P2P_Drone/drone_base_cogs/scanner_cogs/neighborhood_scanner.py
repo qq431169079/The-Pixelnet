@@ -153,7 +153,7 @@ def port_scan(ip):
 
     except socket.error as err:
         actual_workers.remove(ip)
-        print(f"SOCKET ERROR:{err}")
+        print(f"SOCKET ERROR: {err}")
 
 def worker_scan(*ip):
     str = ''.join(ip)
