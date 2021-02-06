@@ -29,7 +29,7 @@ def link(conn, addr, server):
     conn.send(bytes("attempting_send", "utf-8"))
     print("ATTEMPTED SEND")
     raw_net_link = conn.recv(2048)
-    print("RECEIVED INFORMATION FROM RAW_NET_LINK")
+    print("RECEIVED INFORM1ATION FROM RAW_NET_LINK")
     net_link = raw_net_link.decode('utf-8')
     if net_link == "PIXELNET_CONNECT_P2P_REQUEST":
         print("P2P REQUEST ACK")
