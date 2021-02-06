@@ -20,6 +20,7 @@ def link(conn, addr):
     try:
         net_link = conn.recv(2048)
     except:
+        print("LINK BROKEN")
         conn.close()
         sys.exit()
     try:
