@@ -28,7 +28,16 @@ def link(conn, addr, server):
     print(f"CONNECTED TO {conn} IN LINK")
     #attempting Link establishment
     while waiting_for_information == True:
-        raw_net_link = conn.recv(2048)
+        try:
+            raw_net_link = conn.recv(2048)
+        except:
+            print("Likely Port Scan")
+            try:
+                conn.close()
+            except:
+                pass
+            finally:
+                sys.exit()
         if raw_net_link:
             print("RECEIVED INFORMATION FROM RAW_NET_LINK")
             net_link = raw_net_link.decode('utf-8')
