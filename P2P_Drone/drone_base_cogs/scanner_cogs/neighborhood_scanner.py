@@ -100,19 +100,22 @@ def peer_recording(ip, port):
     sys.exit()
 
 def port_scan(ip):
+    outreach_list = []
     actual_workers.append(ip)
     try:
         for port in range(49975,50001):
             ip = str(ip)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             sock.settimeout(5)
+            address = (ip, port)
             result = sock.connect_ex((ip, port))
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")
+                outreach_list.append(address)
                 peer_record_thread = threading.Thread(target=peer_recording, args=(ip, port))
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
-                p2p_outreach_link(ip, port, sock)
+                #p2p_outreach_link(ip, port, sock)
                 if port == 50000:
                     actual_workers.remove(ip)
                     #print("Completed Scan.")
@@ -121,6 +124,11 @@ def port_scan(ip):
                             actual_workers.remove(lhost)
                         except:
                             pass
+                    if outreach_list:
+                        for addresses in outreach_list:
+                            p2p_outreach_thread = threading.Thread(target=p2p_outreach_link, args=(addresses, sock))
+                            p2p_outreach_thread.name = f"p2p_outreach_thread {addresses}"
+                            p2p_outreach_thread.start()
                     #print(actual_workers)
                     try:
                         sock.close()
@@ -159,13 +167,13 @@ def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
 
-def p2p_outreach_link(ip, port, sock):
-    address = (ip, port)
-    print(f"OUTREACHING TO {ip}, {port}")
+def p2p_outreach_link(address, sock):
+    print(f"OUTREACHING TO {address}")
     sock.settimeout(10)
     sock.connect(address)
     #sock.close()
     #return "outreach_failed"
+    time.sleep(1)
     sock.sendall(bytes("PIXELNET_CONNECT_P2P_REQUEST", "utf-8"))
     sock.close()
-    return "outreach_complete"
+    sys.exit()
