@@ -168,10 +168,16 @@ def worker_scan(*ip):
 def p2p_outreach_link(address, sock):
     print(f"OUTREACHING TO {address}")
     sock.settimeout(10)
-    sock.connect(address)
-    #sock.close()
-    #return "outreach_failed"
+    try:
+        sock.connect(address)
+    except:
+        sock.close()
+        return "outreach_failed"
     time.sleep(1)
-    sock.sendall(bytes("PIXELNET_CONNECT_P2P_REQUEST", "utf-8"))
-    sock.close()
-    sys.exit()
+    try:
+        sock.sendall(bytes("PIXELNET_CONNECT_P2P_REQUEST", "utf-8"))
+        sock.close()
+    except:
+        sock.close()
+        return "outreach_failed"
+    return "outreach_complete"
