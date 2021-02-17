@@ -27,8 +27,6 @@ def link(conn):
     print("NET_LINK_KINDA_ESTABLISHED")
     print(f"CONNECTED TO {conn} IN LINK")
     #attempting Link establishment
-    conn.send(bytes("attempting_send", "utf-8"))
-    print("ATTEMPTED SEND")
     while waiting_for_information == True:
         try:
             raw_net_link = conn.recv(2048)
