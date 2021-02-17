@@ -28,21 +28,26 @@ def initialization_process():
     neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
     neighborhood_scanner_init_thread.name = "init_scanner_thread"
     neighborhood_scanner_init_thread.start()
+tried_binds = []
 while binding == True:
     HOST = get_ip.get_ip()
     PORT = random.randrange(49995, 50000)
     if bind_attempts >= 5:
         sys.exit()
-    try:
-        server.bind((HOST, PORT))
-        print(f"BOUND TO: {HOST}:{PORT}")
-        binding = False
-        time.sleep(1)
-        init_thread = threading.Thread(target=initialization_process, args=())
-        init_thread.name = "init_thread"
-        init_thread.start()
-    except:
-        bind_attempts += 1
+    if PORT not in tried_binds:
+        try:
+            server.bind((HOST, PORT))
+            print(f"BOUND TO: {HOST}:{PORT}")
+            time.sleep(1)
+            init_thread = threading.Thread(target=initialization_process, args=())
+            init_thread.name = "init_thread"
+            init_thread.start()
+            binding = False
+        except:
+            tried_binds.append(PORT)
+            bind_attempts += 1
+    else:
+        continue
 def modules(connection, address):
     pass
 
