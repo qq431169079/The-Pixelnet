@@ -125,10 +125,8 @@ def port_scan(ip):
                         except:
                             pass
                     if outreach_list:
-                        for addresses in outreach_list:
-                            p2p_outreach_thread = threading.Thread(target=p2p_outreach_link, args=(addresses, sock))
-                            p2p_outreach_thread.name = f"p2p_outreach_thread {addresses}"
-                            p2p_outreach_thread.start()
+                        for address in outreach_list:
+                            p2p_outreach_link(address, sock)
                     #print(actual_workers)
                     try:
                         sock.close()
