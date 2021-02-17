@@ -103,7 +103,7 @@ def port_scan(ip):
     outreach_list = []
     actual_workers.append(ip)
     try:
-        for port in range(49975,50001):
+        for port in range(49995,50001):
             ip = str(ip)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
             sock.settimeout(5)

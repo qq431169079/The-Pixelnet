@@ -30,7 +30,7 @@ def initialization_process():
     neighborhood_scanner_init_thread.start()
 while binding == True:
     HOST = get_ip.get_ip()
-    PORT = random.randrange(49975, 50000)
+    PORT = random.randrange(49995, 50000)
     if bind_attempts >= 5:
         sys.exit()
     try:
