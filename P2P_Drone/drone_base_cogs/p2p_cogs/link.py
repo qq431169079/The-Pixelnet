@@ -21,7 +21,7 @@ def p2p_welcomer(server):
                 link_drone_thread.name = "drone_link"
                 link_drone_thread.start()
 
-def link(conn, addr, server):
+def link(conn):
     waiting_for_information = True
     conn.settimeout(10)
     print("NET_LINK_KINDA_ESTABLISHED")
@@ -32,6 +32,7 @@ def link(conn, addr, server):
     while waiting_for_information == True:
         try:
             raw_net_link = conn.recv(2048)
+            print(f"RAW NET LINK: {raw_net_link}")
         except:
             print("Likely Port Scan")
             try:
