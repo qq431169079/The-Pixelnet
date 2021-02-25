@@ -8,7 +8,7 @@ from drone_base_cogs.scanner_cogs import *
 from drone_base_cogs.scanner_cogs import get_ip
 from drone_base_cogs.scanner_cogs import neighborhood_scanner
 from drone_base_cogs.p2p_cogs import *
-from drone_base_cogs.p2p_cogs import link
+from drone_base_cogs.p2p_cogs import incoming_link
 binding = True
 squadron_dict = {}
 squadron_checked = 0
@@ -17,7 +17,7 @@ global server
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 bind_attempts = 0
 def initialization_process():
-    p2p_server_thread = threading.Thread(target=link.p2p_welcomer, args=(server,))
+    p2p_server_thread = threading.Thread(target=incoming_link.p2p_welcomer, args=(server,))
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
     try:

@@ -43,7 +43,7 @@ def peer_scan():
         targets.append(lhost[:lhost.rfind(".")] + "." + target_number)
         if i >= max_ip - 1:
             # Putting the line below on hold for now, for connection testing purposes.
-            targets.remove(lhost)
+            #targets.remove(lhost)
             try:
                 targets.remove(broadcast)
             except:
@@ -100,7 +100,6 @@ def peer_recording(ip, port):
     sys.exit()
 
 def port_scan(ip):
-    outreach_list = []
     actual_workers.append(ip)
     try:
         for port in range(49995,50001):
@@ -109,13 +108,12 @@ def port_scan(ip):
             sock.settimeout(5)
             address = (ip, port)
             result = sock.connect_ex((ip, port))
+            sock.close()
             if result == 0:
                 print(f"GOT POSSIBLE PEER FROM {ip}:{port}")
-                outreach_list.append(address)
                 peer_record_thread = threading.Thread(target=peer_recording, args=(ip, port))
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
-                #p2p_outreach_link(ip, port, sock)
                 if port == 50000:
                     actual_workers.remove(ip)
                     #print("Completed Scan.")
@@ -124,9 +122,6 @@ def port_scan(ip):
                             actual_workers.remove(lhost)
                         except:
                             pass
-                    if outreach_list:
-                        for address in outreach_list:
-                            p2p_outreach_link(address, sock)
                     #print(actual_workers)
                     try:
                         sock.close()
@@ -152,32 +147,17 @@ def port_scan(ip):
             else:
                 pass
                 #print(f"Nothing on {ip}:{port}")
-            sock.close()
     except socket.gaierror:
         actual_workers.remove(ip)
         sys.exit()
-
     except socket.error as err:
-        actual_workers.remove(ip)
+        try:
+            actual_workers.remove(ip)
+        except:
+            pass
         print(f"SOCKET ERROR: {err}")
 
 def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
 
-def p2p_outreach_link(address, sock):
-    print(f"OUTREACHING TO {address}")
-    sock.settimeout(10)
-    try:
-        sock.connect(address)
-    except:
-        sock.close()
-        return "outreach_failed"
-    time.sleep(1)
-    try:
-        sock.sendall(bytes("PIXELNET_CONNECT_P2P_REQUEST", "utf-8"))
-        sock.close()
-    except:
-        sock.close()
-        return "outreach_failed"
-    return "outreach_complete"
