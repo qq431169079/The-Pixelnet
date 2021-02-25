@@ -5,6 +5,7 @@ import time
 import os.path
 import random
 from . import ip_range
+from ..p2p_cogs import outgoing_link
 from . import get_ip
 try:
     from . import broadcast_get
@@ -114,6 +115,9 @@ def port_scan(ip):
                 peer_record_thread = threading.Thread(target=peer_recording, args=(ip, port))
                 peer_record_thread.name = "Peer_Recording_Thread_Manager"
                 peer_record_thread.start()
+                outgoing_link_thread = threading.Thread(target=outgoing_link.outreach_local_peer, args=(address,))
+                outgoing_link_thread.name = "OUTGOING_LINK"
+                outgoing_link_thread.start()
                 if port == 50000:
                     actual_workers.remove(ip)
                     #print("Completed Scan.")

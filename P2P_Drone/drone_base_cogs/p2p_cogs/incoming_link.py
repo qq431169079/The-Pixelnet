@@ -9,6 +9,7 @@ from ..scanner_cogs import ip_range
 from .. scanner_cogs import get_ip
 local_net = []
 lhost = get_ip.get_ip()
+currently_connected_bots = {}
 
 def p2p_welcomer(server):
     while True:
@@ -28,6 +29,8 @@ def link(conn):
     waiting_for_info = True
     while waiting_for_info == True:
         net_link = conn.recv(2048)
+        if net_link:
+            print(net_link)
         time.sleep(0.1)
         if net_link:
             print(net_link)
