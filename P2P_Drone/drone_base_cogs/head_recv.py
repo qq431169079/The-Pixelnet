@@ -8,12 +8,9 @@ def head_recv(conn):
             message = str(message)
             message_split = message.split()
             if message_split:
-                print(message_split)
-            if message_split:
                 if "[!$HEADER$!]" in message_split:
                     if "[$!FOOTER$!]" in message_split:
                         if len(message_split[2]) == int(message_split[1]):
-                            print(message)
                             return "complete"
                         else:
                             print("Message length does not to match length expected.")

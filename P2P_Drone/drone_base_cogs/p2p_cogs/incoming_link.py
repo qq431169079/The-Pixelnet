@@ -1,7 +1,5 @@
 import threading
 import socket
-import os.path
-import time
 import sys
 from ..scanner_cogs import *
 from ..scanner_cogs import neighborhood_scanner
@@ -10,8 +8,6 @@ from .. scanner_cogs import get_ip
 from ..head_recv import *
 local_net = []
 lhost = get_ip.get_ip()
-currently_connected_bots = []
-
 def p2p_welcomer(server):
     while True:
         server.listen(10)
