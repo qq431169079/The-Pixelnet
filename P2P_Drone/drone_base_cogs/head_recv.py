@@ -1,5 +1,3 @@
-import socket 
-
 def head_recv(conn):
     while 1:
         message_raw = conn.recv(2048)

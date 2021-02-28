@@ -1,4 +1,3 @@
-import time
 def heading_wrap(message):
     if message:
         print(f"MESSAGE TO SEND: {message}")
