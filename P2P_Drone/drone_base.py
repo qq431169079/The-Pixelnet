@@ -48,11 +48,6 @@ while binding == True:
             bind_attempts += 1
     else:
         continue
-def modules(connection, address):
-    pass
-
-def squadron_check(squadron_dict):
-    pass
-
+    
 while True:
     time.sleep(1)
