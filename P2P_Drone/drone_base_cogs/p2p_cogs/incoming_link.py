@@ -23,7 +23,7 @@ def p2p_welcomer(server):
 def link(conn, addr):
     addr = str(addr)
     ip_message_file_name = addr + ".ipmessage"
-    ip_message_file_location = "./permanence_files/ip_messages"
+    ip_message_file_location = "./permanence_files/ip_messages/incoming_messages/"
     ip_message_file_path = os.path.join(ip_message_file_location, ip_message_file_name)
     print(ip_message_file_path)
     if not os.path.isdir(ip_message_file_location):
@@ -35,6 +35,8 @@ def link(conn, addr):
     while waiting_for_info == True:
         net_link = head_recv(conn)
         if net_link:
+            if net_link == "DRONE_IDLE":
+                conn.settimeout(None)
             print(net_link)
             if type(net_link) == type([]):
                 if net_link[1] == "LOCAL_ERROR":

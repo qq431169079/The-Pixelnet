@@ -4,6 +4,7 @@ import random
 import sys
 import threading
 import os.path
+import shutil
 from drone_base_cogs.scanner_cogs import *
 from drone_base_cogs.scanner_cogs import get_ip
 from drone_base_cogs.scanner_cogs import neighborhood_scanner
@@ -23,6 +24,10 @@ def initialization_process():
     try:
         # Should be noted that after finishing development on VSCode, this needs to be taken out to mean in the context of the stand-alone drone
         os.remove("./permanence_files/peer_scan.lock")
+    except:
+        pass
+    try:
+        shutil.rmtree("./permanence_files/ip_messages")
     except:
         pass
     neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
@@ -48,6 +53,6 @@ while binding == True:
             bind_attempts += 1
     else:
         continue
-    
+
 while True:
     time.sleep(1)
