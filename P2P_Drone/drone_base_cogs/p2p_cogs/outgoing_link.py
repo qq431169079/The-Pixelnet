@@ -3,7 +3,7 @@ import threading
 import sys
 import os
 import time
-from ..head_send import *
+from .head_send import *
 def outreach_local_peer(address):
     outreach_command = threading.Thread(target=outreach, args=(address,))
     outreach_command.name = "OUTREACH_LINK_FOR_REAL"
