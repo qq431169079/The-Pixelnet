@@ -29,14 +29,17 @@ def link(conn, addr):
     if not os.path.isdir(ip_message_file_location):
         os.makedirs(ip_message_file_location, exist_ok=True)
     print("STARTED INCOMING LINK")
-    conn.settimeout(5)
     disconnection_counter = 0
     waiting_for_info = True
+    conn.settimeout(5)
     while waiting_for_info == True:
         net_link = head_recv(conn)
         if net_link:
+            net_link = str(net_link)
             if net_link == "DRONE_IDLE":
                 conn.settimeout(None)
+            else:
+                conn.settimeout(5)
             print(net_link)
             if type(net_link) == type([]):
                 if net_link[1] == "LOCAL_ERROR":
@@ -45,20 +48,33 @@ def link(conn, addr):
                     print(f"SECURITY_ALERT: {net_link[0]} experienced. Non-fatal.")
             try:
                 file = open(ip_message_file_path, "r")
-            except:
+            except Exception as e:
+                print(f"POSSIBLY EXPECTED ERROR FOR .IPMESSAGE FUNCTIONALITY: {e}")
                 try:
                     file = open(ip_message_file_path, "x")
                 except Exception.error as e:
-                    print(f"UNEXPECTED READ/WRITE ERROR FOR .IPMESSAGE FUNCTIONALITY: {e}")
+                    print(f"UNEXPECTED FATAL READ/WRITE ERROR FOR .IPMESSAGE FUNCTIONALITY: {e}")
                     sys.exit()
             finally:
                 try:
                     file = open(ip_message_file_path, "a+")
-                except:
+                except Exception as e:
+                    print(f"UNEXPECTED FATAL READ/WRITE ERROR FOR .IPMESSAGE FUNCTIONALITY: {e}")
                     sys.exit()
-            file.write(net_link)
-            file.write("\n")
-            file.close()
+            if net_link == "DRONE_IDLE":
+                pass
+            else:
+                try:
+                    file.write(net_link)
+                except:
+                    try:
+                        file = open(ip_message_file_path, "a+")
+                        file.write(net_link)
+                    except Exception as e:
+                        print(f"FATAL I/O FAILURE IN INCOMING LINK THREAD: {e}")
+                        sys.exit()
+                file.write("\n")
+                file.close()
         elif not net_link:
             disconnection_counter += 1
         if disconnection_counter == 5:
