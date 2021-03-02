@@ -8,7 +8,6 @@ def heading_wrap(message):
         message_length = str(message_length)
         headed_message = f"[!$HEADER$!] " + message_length + " " + message + " [$!FOOTER$!]"
         headed_message.encode('utf-8')
-        print(headed_message)
         if len(headed_message) > 2048:
             print("Message larger than 2048 bits. Sending Fragments.")
             #TODO: Change code so that the heading_wrap sends message in fragments if this happens.
