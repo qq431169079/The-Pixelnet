@@ -29,6 +29,10 @@ def head_send(conn, message):
         if message:
             headed_message = heading_wrap(message)
             if headed_message:
-                conn.sendall(bytes(headed_message, "utf-8"))
+                try:
+                    conn.sendall(bytes(headed_message, "utf-8"))
+                except Exception as e:
+                    print("FATAL OUTGOING CONNECTION ERROR")
+                    return "FATAL_CONNECTION_ERROR"
             elif not headed_message:
                 return "NO_MESSAGE"

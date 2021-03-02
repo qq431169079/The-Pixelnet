@@ -55,10 +55,21 @@ def outreach(addr):
             if output[0]:
                 message_to_send = output[0]
                 message_to_send = str(message_to_send)
-                time.sleep(1)
                 print(f"MESSAGE TO SEND: {message_to_send}")
-                print(output)
-                head_send(sock, message_to_send)
+                check_for_error = head_send(sock, message_to_send)
+                if check_for_error:
+                    if check_for_error == "FATAL_CONNECTION_ERROR":
+                        print()
+                        try:
+                            file.close()
+                        except:
+                            pass
+                        try:
+                            sock.shutdown(2)
+                        except:
+                            pass
+                        sock.close()
+                        sys.exit()
                 lst = []
                 for line in file:
                     for word in output[0]:
