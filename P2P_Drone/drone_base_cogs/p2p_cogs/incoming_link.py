@@ -2,8 +2,6 @@ import threading
 import os.path
 import sys
 from ..scanner_cogs import *
-from ..scanner_cogs import neighborhood_scanner
-from ..scanner_cogs import ip_range
 from .. scanner_cogs import get_ip
 from .head_recv import *
 local_net = []
