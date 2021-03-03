@@ -33,7 +33,6 @@ def link(conn, addr):
     while waiting_for_info == True:
         net_link = head_recv(conn)
         if net_link:
-            net_link = str(net_link)
             if net_link == "DRONE_IDLE":
                 conn.settimeout(None)
             else:
@@ -70,6 +69,8 @@ def link(conn, addr):
                         file.write(net_link)
                     except Exception as e:
                         print(f"FATAL I/O FAILURE IN INCOMING LINK THREAD: {e}")
+                        conn.shutdown(2)
+                        conn.close()
                         sys.exit()
                 file.write("\n")
                 file.close()
