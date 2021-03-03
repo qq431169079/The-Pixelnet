@@ -51,33 +51,37 @@ def outreach(addr):
                     sys.exit()
         output = []
         for line in file:
+            line = line.rstrip("\n")
             output.append(line)
-            if output[0]:
-                message_to_send = output[0]
-                message_to_send = str(message_to_send)
-                print(f"MESSAGE TO SEND: {message_to_send}")
-                check_for_error = head_send(sock, message_to_send)
-                if check_for_error:
-                    if check_for_error == "FATAL_CONNECTION_ERROR":
-                        print()
-                        try:
-                            file.close()
-                        except:
-                            pass
-                        try:
-                            sock.shutdown(2)
-                        except:
-                            pass
-                        sock.close()
-                        sys.exit()
-                lst = []
-                for line in file:
-                        if output[0] in line:
-                            line = line.replace(output[0],'')
-                            lst.append(line)
-                file = open(ip_message_file_path,'w')
-                for line in lst:
-                    file.write(line)
+            print(output)
+            if output:
+                for message in output:
+                    message_to_send = str(message)
+                    print(f"MESSAGE TO SEND: {message_to_send}")
+                    check_for_error = head_send(sock, message_to_send)
+                    output.remove(message)
+                    if check_for_error:
+                        if check_for_error == "FATAL_CONNECTION_ERROR":
+                            print()
+                            try:
+                                file.close()
+                            except:
+                                pass
+                            try:
+                                sock.shutdown(2)
+                            except:
+                                pass
+                            sock.close()
+                            sys.exit()
+        lst = []
+        for line in file:
+                if line in output:
+                    line = line.replace(output[0],'')
+                    lst.append(line)
+        file = open(ip_message_file_path,'w')
+        for line in lst:
+            print(lst)
+            file.write(line)
         time.sleep(1)
         head_send(sock, "DRONE_IDLE")
         file.close()
