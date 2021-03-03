@@ -15,7 +15,7 @@ def p2p_welcomer(server):
         if conn:
             if addr:
                 link_drone_thread = threading.Thread(target=link, args=(conn, addr))
-                link_drone_thread.name = "drone_link"
+                link_drone_thread.name = "INCOMING_LINK"
                 link_drone_thread.start()
 
 def link(conn, addr):
@@ -61,19 +61,21 @@ def link(conn, addr):
             if net_link == "DRONE_IDLE":
                 pass
             else:
-                try:
-                    file.write(net_link)
-                except:
+                if type(net_link) != type([]):
+                    net_link = str(net_link)
                     try:
-                        file = open(ip_message_file_path, "a+")
                         file.write(net_link)
-                    except Exception as e:
-                        print(f"FATAL I/O FAILURE IN INCOMING LINK THREAD: {e}")
-                        conn.shutdown(2)
-                        conn.close()
-                        sys.exit()
-                file.write("\n")
-                file.close()
+                    except:
+                        try:
+                            file = open(ip_message_file_path, "a+")
+                            file.write(net_link)
+                        except Exception as e:
+                            print(f"FATAL I/O FAILURE IN INCOMING LINK THREAD: {e}")
+                            conn.shutdown(2)
+                            conn.close()
+                            sys.exit()
+                    file.write("\n")
+                    file.close()
         elif not net_link:
             disconnection_counter += 1
         if disconnection_counter == 5:
@@ -88,8 +90,3 @@ def link(conn, addr):
                     pass
                 conn.close()
                 sys.exit()
-def link_drone(conn, addr):
-    link_thread = threading.Thread(target=link, args=(conn,addr))
-    link_thread.start()
-    print(f"Link with {conn}, {addr} established.")
-    sys.exit()
