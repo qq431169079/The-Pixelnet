@@ -1,6 +1,11 @@
-def head_recv(conn):
+def head_recv(conn, addr):
     while 1:
-        message_raw = conn.recv(2048)
+        try:
+            message_raw = conn.recv(2048)
+        except Exception as e:
+            print(f"FATAL CONNECTION ERROR WITH {addr}")
+            print(f"ENCOUNTERED ERROR {e}")
+            return ["FATAL_CONNECTION_ERROR", "LOCAL_ERROR"]
         if message_raw:
             message = message_raw.decode('utf-8')
             message = str(message)

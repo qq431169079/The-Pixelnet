@@ -31,7 +31,7 @@ def link(conn, addr):
     waiting_for_info = True
     conn.settimeout(5)
     while waiting_for_info == True:
-        net_link = head_recv(conn)
+        net_link = head_recv(conn, addr)
         if net_link:
             if net_link == "DRONE_IDLE":
                 conn.settimeout(None)
@@ -40,7 +40,15 @@ def link(conn, addr):
             print(net_link)
             if type(net_link) == type([]):
                 if net_link[1] == "LOCAL_ERROR":
-                    print(f"LOCAL_ERROR: {net_link[0]} experienced. Non-fatal.")
+                    if net_link[0] == "FATAL_CONNECTION_ERROR":
+                        try:
+                            conn.shutdown(2)
+                        except:
+                            pass
+                        conn.close()
+                        sys.exit()
+                    else:
+                        print(f"LOCAL_ERROR: {net_link[0]} experienced. Non-fatal.")
                 if net_link[1] == "SECURITY_ALERT":
                     print(f"SECURITY_ALERT: {net_link[0]} experienced. Non-fatal.")
             try:

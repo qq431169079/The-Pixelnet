@@ -49,7 +49,6 @@ while binding == True:
         try:
             server.bind((HOST, PORT))
             print(f"BOUND TO: {HOST}:{PORT}")
-            time.sleep(1)
             init_thread = threading.Thread(target=initialization_process, args=())
             init_thread.name = "init_thread"
             init_thread.start()
