@@ -37,7 +37,6 @@ def link(conn, addr):
                 conn.settimeout(None)
             else:
                 conn.settimeout(5)
-            print(net_link)
             if type(net_link) == type([]):
                 if net_link[1] == "LOCAL_ERROR":
                     if net_link[0] == "FATAL_CONNECTION_ERROR":
