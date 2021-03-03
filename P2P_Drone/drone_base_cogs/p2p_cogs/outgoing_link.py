@@ -72,10 +72,9 @@ def outreach(addr):
                         sys.exit()
                 lst = []
                 for line in file:
-                    for word in output[0]:
-                        if word in line:
-                            line = line.replace(word,'')
-                    lst.append(line)
+                        if output[0] in line:
+                            line = line.replace(output[0],'')
+                            lst.append(line)
                 file = open(ip_message_file_path,'w')
                 for line in lst:
                     file.write(line)
