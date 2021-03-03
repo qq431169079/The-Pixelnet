@@ -85,7 +85,6 @@ def link(conn, addr):
                     conn.shutdown(2)
                 except:
                     pass
-            finally:
                 conn.close()
                 sys.exit()
 def link_drone(conn, addr):
