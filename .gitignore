@@ -2,8 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=vscode,windows,python
 
 ###Custom files from botnet###
-.ipmessage*
-.lock
+*.ipmessage
+*.lock
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
