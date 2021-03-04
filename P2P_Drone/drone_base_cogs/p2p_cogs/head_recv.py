@@ -1,3 +1,4 @@
+import zlib
 def head_recv(conn, addr):
     while 1:
         try:
@@ -10,13 +11,16 @@ def head_recv(conn, addr):
             message = message_raw.decode('utf-8')
             message = str(message)
             message_split = message.split()
-            message = message_split[2]
+            message = message_split[3]
             if message_split:
                 if "[!$HEADER$!]" in message_split:
                     if "[$!FOOTER$!]" in message_split:
                         if len(message) == int(message_split[1]):
                             if "LOCAL_ERROR" not in message_split:
-                                return message
+                                if int(zlib.crc32(bytes(message_split[3], "utf-8"))) == int(message_split[2]):
+                                    return message
+                                else:
+                                    return ["CRC_ERROR", "LOCAL_ERROR"]
                             else:
                                 return ["ATTEMPTED_ERROR_HIJACK", "SECURITY_ALERT"]
                         else:
