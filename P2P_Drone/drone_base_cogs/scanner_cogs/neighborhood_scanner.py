@@ -140,8 +140,8 @@ def port_scan(ip):
                 if lhost in actual_workers:
                     try:
                         actual_workers.remove(lhost)
-                    except:
-                        pass
+                    except ValueError as e:
+                        print(f"Had exception {e} when attempting to remove localhost from neighborhood scanner.")
                 #print(actual_workers)
                 try:
                     sock.close()

@@ -20,7 +20,7 @@ def outreach(addr):
         print("OUTREACH_FAILED")
         try:
             sock.shutdown(2)
-        except:
+        except socket.error:
             pass
         try:
             sock.close()
@@ -69,7 +69,7 @@ def outreach(addr):
                                 pass
                             try:
                                 sock.shutdown(2)
-                            except:
+                            except socket.error as e:
                                 pass
                             sock.close()
                             sys.exit()

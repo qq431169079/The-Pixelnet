@@ -2,7 +2,7 @@ import subprocess
 import platform
 try:
     import netifaces
-except:
+except ImportError:
     pass
 from . import *
 from . import get_ip
