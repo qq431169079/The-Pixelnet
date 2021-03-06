@@ -24,6 +24,14 @@ def initialization_process():
         pass
     if ".pyw" in self_name:
         sys.stdout = open(os.devnull, 'w')
+    file = open("./permanence_files/port_report.txt", "r")
+    for line in file:
+        if line:
+            line = line.rstrip("\n")
+            string_split = line.split(":")
+            ip = string_split[0]
+            port = string_split[1]
+            scan_result = neighborhood_scanner.specific_port_scan(ip, port)
     p2p_server_thread = threading.Thread(target=incoming_link.p2p_welcomer, args=(server,))
     p2p_server_thread.name = "p2p_welcomer"
     p2p_server_thread.start()
