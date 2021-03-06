@@ -161,6 +161,42 @@ def port_scan(ip):
             pass
         print(f"SOCKET ERROR: {err}")
 
+def specific_port_scan(ip, port):
+    ip = str(ip)
+    port = int(port)
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        sock.settimeout(5)
+        address = (ip, port)
+        result = sock.connect_ex(address)
+        sock.close()
+        if result == 0:
+            outgoing_link_thread = threading.Thread(target=outgoing_link.outreach_local_peer, args=(address,))
+            outgoing_link_thread.name = "OUTGOING_LINK"
+            outgoing_link_thread.start()
+            return "PORT_UP"
+        else:
+            file = open("./permanence_files/port_report.txt", "w")
+            lst = []
+            for line in file:
+                line = line.replace(address,'')
+                lst.append(line)
+            for line in lst:
+                file.write(line)
+            file.close()
+            return "PORT_NOT_UP"
+    except socket.gaierror:
+        file = open("./permanence_files/port_report.txt", "w")
+        lst = []
+        for line in file:
+            line = line.replace(address,'')
+            lst.append(line)
+        for line in lst:
+            file.write(line)
+        file.close()
+        return "PORT_NOT_UP"
+    except socket.error:
+        pass
 def worker_scan(*ip):
     str = ''.join(ip)
     port_scan(str)
