@@ -1,5 +1,6 @@
 import time
 import zlib
+import sys
 def heading_wrap(message):
     time.sleep(0.5)
     if message:
@@ -26,8 +27,13 @@ def head_send(conn, message):
             if headed_message:
                 try:
                     conn.sendall(bytes(headed_message, "utf-8"))
+                    return
                 except Exception as e:
-                    print("FATAL OUTGOING CONNECTION ERROR")
-                    return "FATAL_CONNECTION_ERROR"
+                    print(f"FATAL OUTGOING CONNECTION ERROR: {e}")
+                    try:
+                        conn.shutdown(2)
+                    except:
+                        pass
+                    sys.exit()
             elif not headed_message:
                 return "NO_MESSAGE"
