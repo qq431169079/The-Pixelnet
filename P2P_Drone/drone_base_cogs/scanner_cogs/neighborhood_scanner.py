@@ -36,7 +36,7 @@ def peer_scan():
     try:
         broadcast = broadcast_get.get()
     except Exception as e:
-        print(f"IN COULD NOT GET BROADCAST IP BECAUSE OF EXCEPTION: {e}")
+        print(f"COULD NOT GET BROADCAST IP BECAUSE OF EXCEPTION: {e}")
         broadcast = False
     for i in range(0, max_ip):
         target_number = int(target_number)
