@@ -19,4 +19,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint `P2P_Drone/drone_base.py`
+        pylint `./P2P_Drone/drone_base.py`
