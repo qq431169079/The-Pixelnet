@@ -4,7 +4,6 @@
 ###Custom files from botnet###
 *.ipmessage
 *.lock
-port_report.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -182,3 +181,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/vscode,windows,python
 .vscode/settings.json
+permanence_files/port_report.txt
