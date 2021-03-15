@@ -20,8 +20,8 @@ bind_attempts = 0
 def initialization_process():
     try:
         self_name = os.path.basename(__file__)
-    except:
-        pass
+    except Exception as e:
+        print(f"COULD NOT FIND NAME OF THIS FILE BECAUSE OF EXCEPTION: {e}")
     if ".pyw" in self_name:
         sys.stdout = open(os.devnull, 'w')
     p2p_server_thread = threading.Thread(target=incoming_link.p2p_welcomer, args=(server,))

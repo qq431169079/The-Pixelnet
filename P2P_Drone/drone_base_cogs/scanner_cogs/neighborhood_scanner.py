@@ -30,8 +30,8 @@ def peer_scan():
     try:
         peer_lock = open(lock_file_path, "x")
         peer_lock.close()
-    except:
-        pass
+    except Exception as e:
+        print(f"COULD NOT OPEN OR CLOSE FILE {peer_lock} BECAUSE OF EXCEPTION: {e}")
     target_number = 0
     try:
         broadcast = broadcast_get.get()
@@ -147,8 +147,8 @@ def port_scan(ip):
                 #print(actual_workers)
                 try:
                     sock.close()
-                except:
-                    pass
+                except Exception as e:
+                    print(f"COULD NOT CLOSE CONNECTION {sock} BECAUSE OF EXCEPTION: {e}")
                 sys.exit()
             else:
                 pass
@@ -159,8 +159,8 @@ def port_scan(ip):
     except socket.error as err:
         try:
             actual_workers.remove(ip)
-        except:
-            pass
+        except Exception as e:
+            print(f"COULD NOT REMOVE WORKER: {ip} FROM ACTUAL_WORKERS LIST BECAUSE OF EXCEPTION: {e} ")
         print(f"SOCKET ERROR: {err}")
 def worker_scan(*ip):
     str = ''.join(ip)

@@ -93,7 +93,7 @@ def link(conn, addr):
                 print("INCOMING_LINK_DISCONNECTED")
                 try:
                     conn.shutdown(2)
-                except:
-                    pass
+                except Exception as e:
+                    print(f"CANNOT SHUTDOWN CONNECTION {conn} BECAUSE OF EXCEPTION {e}")
                 conn.close()
                 sys.exit()
