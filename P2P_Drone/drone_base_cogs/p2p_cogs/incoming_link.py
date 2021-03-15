@@ -35,9 +35,22 @@ def link(conn, addr):
     ip_message_file_name = addr + ".ipmessage"
     ip_message_file_location = "./permanence_files/ip_messages/incoming_messages/"
     ip_message_file_path = os.path.join(ip_message_file_location, ip_message_file_name)
-    print(ip_message_file_path)
-    if not os.path.isdir(ip_message_file_location):
-        os.makedirs(ip_message_file_location, exist_ok=True)
+    if os.path.isdir(ip_message_file_path):
+        try:
+            os.remove(ip_message_file_path)
+        except Exception as e:
+            print(f"UNABLE TO REMOVE IP FILE PATH. THIS IS NORMAL IF THE FILE WAS ALREADY DELETED OR DID NOT EXIST. CAUSED BY EXCEPTION: {e}")
+    if not os.path.isdir(ip_message_file_path):
+        try:
+            os.makedirs(ip_message_file_location, exist_ok=True)
+        except Exception as e:
+            print(f"FATAL ERROR FOR .IPMESSAGE FUNCTIONALITY, CANNOT CREATE REQUIRED FILES/DIRECTORY. CAUSED BY EXCEPTION: {e}")
+            try:
+                conn.shutdown(2)
+            except Exception as e:
+                print(f"SOCK SHUTDOWN ERROR IN DISCONNECTION PROCEDURE. CAUSED BY EXCEPTION: {e}")
+            conn.close()
+            sys.exit()
     print("STARTED INCOMING LINK")
     disconnection_counter = 0
     waiting_for_info = True
