@@ -9,8 +9,8 @@ from ..p2p_cogs import outgoing_link
 from . import get_ip
 try:
     from . import broadcast_get
-except:
-    pass
+except Exception as e:
+    print(f"FAILED TO IMPORT BROADCAST_GET BECAUSE EXCEPTION: {e}")
 possible_peers = []
 max_ip = ip_range.ip_range()
 global lhost
@@ -35,8 +35,9 @@ def peer_scan():
     target_number = 0
     try:
         broadcast = broadcast_get.get()
-    except:
-        pass
+    except Exception as e:
+        print(f"IN COULD NOT GET BROADCAST IP BECAUSE OF EXCEPTION: {e}")
+        broadcast = False
     for i in range(0, max_ip):
         target_number = int(target_number)
         target_number += 1
@@ -45,10 +46,11 @@ def peer_scan():
         if i >= max_ip - 1:
             # Putting the line below on hold for now, for connection testing purposes.
             #targets.remove(lhost)
-            try:
-                targets.remove(broadcast)
-            except:
-                pass
+            if broadcast != False:
+                try:
+                    targets.remove(broadcast)
+                except Exception as e:
+                    print(f"COULD NOT REMOVE BROADCAST IP FROM TARGETS LIST BECAUSE OF EXCEPTION: {e}")
             for workers in targets:
                 worker_threads = threading.Thread(target=worker_scan, args=(workers))
                 worker_threads.name = f"Port Scan Worker {workers}"
@@ -124,13 +126,13 @@ def port_scan(ip):
                     if lhost in actual_workers:
                         try:
                             actual_workers.remove(lhost)
-                        except:
-                            pass
+                        except ValueError as e:
+                            print(f"Had exception {e} when attempting to remove localhost from neighborhood scanner.")
                     #print(actual_workers)
                     try:
                         sock.close()
-                    except:
-                        pass
+                    except Exception as e:
+                        print(f"DEBUG: COULD NOT CLOSE SOCK {sock} BECAUSE OF EXCEPTION: {e}.")
                     sys.exit()
                 else:
                     break

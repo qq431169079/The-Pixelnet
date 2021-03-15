@@ -62,11 +62,10 @@ def outreach(addr):
                     output.remove(message)
                     if check_for_error:
                         if check_for_error == "FATAL_CONNECTION_ERROR":
-                            print()
                             try:
                                 file.close()
-                            except:
-                                pass
+                            except Exception as e:
+                                print(f"DEBUG: COULD NOT CLOSE FILE: {file} IN FATAL_CONNECTION_ERROR SHUTDOWN SEQUENCE: {e}")
                             try:
                                 sock.shutdown(2)
                             except socket.error as e:

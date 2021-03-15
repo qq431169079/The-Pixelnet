@@ -30,12 +30,12 @@ def initialization_process():
     try:
         # Should be noted that after finishing development on VSCode, this needs to be taken out to mean in the context of the stand-alone drone
         os.remove("./permanence_files/peer_scan.lock")
-    except:
-        pass
+    except Exception as e:
+        print(f"COULD NOT REMOVE peer_scan.lock IN START UP SEQUENCE BECAUSE OF EXCEPTION {e}")
     try:
         shutil.rmtree("./permanence_files/ip_messages")
-    except:
-        pass
+    except Exception as e:
+        print(f"COULD NOT REMOVE TREE ./permanence_files/ip_messages IN START UP SEQUENCE BECAUSE OF EXCEPTION {e}")
     neighborhood_scanner_init_thread = threading.Thread(target=neighborhood_scanner.peer_scan, args=())
     neighborhood_scanner_init_thread.name = "init_scanner_thread"
     neighborhood_scanner_init_thread.start()

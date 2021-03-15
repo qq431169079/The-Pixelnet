@@ -42,8 +42,8 @@ def link(conn, addr):
                     if net_link[0] == "FATAL_CONNECTION_ERROR":
                         try:
                             conn.shutdown(2)
-                        except:
-                            pass
+                        except Exception as e:
+                            print(f"COULD NOT SHUTDOWN CONNECTION {conn} BECAUSE OF EXCEPTION {e}")
                         conn.close()
                         sys.exit()
                     else:
