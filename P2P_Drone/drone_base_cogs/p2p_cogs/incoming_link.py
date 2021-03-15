@@ -17,6 +17,18 @@ def p2p_welcomer(server):
                 link_drone_thread = threading.Thread(target=link, args=(conn, addr))
                 link_drone_thread.name = "INCOMING_LINK"
                 link_drone_thread.start()
+            else:
+                try:
+                    conn.shutdown(2)
+                except Exception as e:
+                    print(f"CONNECTION SHUTDOWN FAILED FOR CONNECTION {conn} AT WELCOMER BECAUSE OF EXCEPTION: {e}")
+                conn.close()
+        else:
+            try:
+                conn.shutdown(2)
+            except Exception as e:
+                print(f"CONNECTION SHUTDOWN FAILED FOR CONNECTION {conn} AT WELCOMER BECAUSE OF EXCEPTION: {e}")
+            conn.close()
 
 def link(conn, addr):
     addr = str(addr)
