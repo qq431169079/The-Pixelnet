@@ -14,7 +14,9 @@ def head_recv(conn, addr):
             message_split = message.split()
             message = message_split[3:]
             message.remove("[$!FOOTER$!]")
-            message = " ".join((message))
+            #NOTE: For now, this solution is TEMPORARY. This can currently only handle messages that have 1 space between the characters. Any more, and the entire message is trash.
+            message = " ".join(message)
+            message = str(message)
             print(message)
             if message_split:
                 if int(zlib.crc32(bytes(message, "utf-8"))) == int(message_split[2]):
