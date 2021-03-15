@@ -25,7 +25,7 @@ def heading_wrap(message):
                 message_length = str(messages)
                 headed_message = f"[!$HEADER$!] " + message_length + " " + crc_check + " " + message + " [$!FOOTER$!]"
                 headed_message.encode('utf-8')
-                headed_message.append(messages_concat)
+                messages_concat.append(headed_message)
                 #TODO: Change code so that the heading_wrap sends message in fragments if this happens.
             return headed_message
         else:
@@ -38,15 +38,26 @@ def head_send(conn, message):
         if message:
             headed_message = heading_wrap(message)
             if headed_message:
-                try:
-                    conn.sendall(bytes(headed_message, "utf-8"))
-                    print("Successfully sent!")
-                except Exception as e:
-                    print(f"FATAL OUTGOING CONNECTION ERROR: {e}")
+                if headed_message == type([]):
+                    for message in headed_message:
+                        try:
+                            conn.sendall(bytes(headed_message, "utf-8"))
+                        except Exception as e:
+                            print(f"FATAL OUTGOING CONNECTION ERROR: {e}")
+                            try:
+                                conn.shutdown(2)
+                            except:
+                                pass
+                            sys.exit()
+                else:
                     try:
-                        conn.shutdown(2)
-                    except:
-                        pass
-                    sys.exit()
+                        conn.sendall(bytes(headed_message, "utf-8"))
+                    except Exception as e:
+                        print(f"FATAL OUTGOING CONNECTION ERROR: {e}")
+                        try:
+                            conn.shutdown(2)
+                        except:
+                            pass
+                        sys.exit()
             elif not headed_message:
                 return "NO_MESSAGE"
