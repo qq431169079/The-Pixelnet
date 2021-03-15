@@ -44,11 +44,11 @@ while binding == True:
     HOST = get_ip.get_ip()
     PORT = random.randrange(49995, 50000)
     if bind_attempts >= 5:
+        print("HOST MACHINE REFUSED BIND FIVE TIMES, SHUTTING DOWN BOT")
         sys.exit()
     if PORT not in tried_binds:
         try:
             server.bind((HOST, PORT))
-            print(f"BOUND TO: {HOST}:{PORT}")
             init_thread = threading.Thread(target=initialization_process, args=())
             init_thread.name = "init_thread"
             init_thread.start()
