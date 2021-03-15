@@ -1,5 +1,6 @@
 import zlib
 def head_recv(conn, addr):
+    conn.settimeout(5)
     while 1:
         try:
             message_raw = conn.recv(2048)
@@ -35,5 +36,5 @@ def head_recv(conn, addr):
                         return ["HEADER_ERROR", "LOCAL_ERROR"]
                 else:
                     return ["CRC_ERROR", "LOCAL_ERROR"]
-            else:
-                return message_raw
+        else:
+            return message_raw
