@@ -4,6 +4,7 @@
 ###Custom files from botnet###
 *.ipmessage
 *.lock
+port_report.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
