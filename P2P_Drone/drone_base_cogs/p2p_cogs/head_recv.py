@@ -11,9 +11,12 @@ def head_recv(conn, addr):
             message = message_raw.decode('utf-8')
             message = str(message)
             message_split = message.split()
-            message = message_split[3]
+            message = message_split[3:]
+            message.remove("[$!FOOTER$!]")
+            message = " ".join((message))
+            print(message)
             if message_split:
-                if int(zlib.crc32(bytes(message_split[3], "utf-8"))) == int(message_split[2]):
+                if int(zlib.crc32(bytes(message, "utf-8"))) == int(message_split[2]):
                     if "[!$HEADER$!]" in message_split:
                         if "[$!FOOTER$!]" in message_split:
                             if len(message) == int(message_split[1]):
